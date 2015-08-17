@@ -22,7 +22,8 @@ describe 'nzbget' do
           it { is_expected.to contain_class('nzbget::service') \
             .that_subscribes_to('nzbget::config') }
 
-          it { is_expected.to contain_wget__fetch('nzbget download') }
+          it { is_expected.to contain_wget__fetch('nzbget download') \
+            .that_comes_before('Exec[nzbget install]') }
           it { is_expected.to contain_exec('nzbget install') }
           it { is_expected.to contain_user('nzbget') }
 

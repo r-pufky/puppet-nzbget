@@ -26,4 +26,6 @@ class nzbget::install {
       system     => true,
     }
   }
+
+  Wget::Fetch['nzbget download'] -> Exec['nzbget install']
 }
