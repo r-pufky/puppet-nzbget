@@ -7,7 +7,6 @@ class nzbget::install {
   wget::fetch { 'nzbget download':
     source      => $::nzbget::source_url,
     destination => $::nzbget::destination_file,
-    cache_dir   => $::nzbget::cache_dir,
   }
 
   exec { 'nzbget install':

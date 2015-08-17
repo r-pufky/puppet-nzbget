@@ -12,7 +12,6 @@
 #
 class nzbget (
   # Install params
-  $cache_dir        = $::nzbget::params::cache_dir,
   $destination_file = $::nzbget::params::destination_file,
   $install_dir      = $::nzbget::params::install_dir,
   $manage_user      = $::nzbget::params::manage_user,
@@ -140,7 +139,7 @@ class nzbget (
   ) inherits ::nzbget::params {
 
   # Install params
-  validate_absolute_path($cache_dir, $destination_file, $install_dir)
+  validate_absolute_path($destination_file, $install_dir)
   validate_bool($manage_user)
   validate_string($source_url, $user)
 

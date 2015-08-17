@@ -5,7 +5,6 @@
 #
 class nzbget::params {
   # Install params
-  $cache_dir        = '/var/cache/wget'
   $destination_file = '/srv/nzbget-bin-linux.run'
   $install_dir      = '/srv/nzbget'
   $manage_user      = true
