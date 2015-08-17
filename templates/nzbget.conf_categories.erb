@@ -1,7 +1,7 @@
 ##############################################################################
 ### CATEGORIES                                                             ###
 
-<%- if @categories.length > 0 -%>
+<%- if !@categories.nil? and @categories.length > 0 -%>
     <%- @categories.each do |category| -%>
         <%- category_num = @categories.index(category) + 1 -%>
 # Category name.

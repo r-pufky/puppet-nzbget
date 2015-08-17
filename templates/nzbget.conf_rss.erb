@@ -1,7 +1,7 @@
 ##############################################################################
 ### RSS FEEDS                                                              ###
 
-<%- if @rss_feeds.length > 0 -%>
+<%- if !@rss.nil? and @rss_feeds.length > 0 -%>
     <%- @rss_feeds.each do |feed| -%>
         <%- feed_num = @rss_feeds.index(feed) + 1 -%>
 # Name of RSS Feed.

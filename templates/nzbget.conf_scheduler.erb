@@ -1,7 +1,7 @@
 ##############################################################################
 ### SCHEDULER                                                              ###
 
-<%- if @tasks.length > 0 -%>
+<%- if !@tasks.nil? and @tasks.length > 0 -%>
     <%- @tasks.each do |task| -%>
         <%- task_num = @tasks.index(task) + 1 -%>
 # Time to execute the command (HH:MM).

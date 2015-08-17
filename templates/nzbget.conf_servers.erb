@@ -1,7 +1,7 @@
 ##############################################################################
 ### NEWS-SERVERS                                                           ###
 
-<%- if @servers.length > 0 -%>
+<%- if !@servers.nil? and @servers.length > 0 -%>
     <%- @servers.each do |server| -%>
         <%- server_num = @servers.index(server) + 1 -%>
 # Use this news server (yes, no).
