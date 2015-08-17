@@ -1,0 +1,42 @@
+##############################################################################
+### PAR CHECK/REPAIR                                                       ###
+
+# Whether and how par-verification must be performed (auto, always, force, manual).
+ParCheck=<%= @par_check %>
+
+# Check for renamed and missing files (yes, no).
+ParRename=<%= @par_rename %>
+
+# Automatic par-repair after par-verification (yes, no).
+ParRepair=<%= @par_repair %>
+
+# What files should be scanned during par-verification (auto, limited,
+# full).
+ParScan=<%= @par_scan %>
+
+# Quick file verification during par-check (yes, no).
+ParQuick=<%= @par_quick %>
+
+# Memory limit for par-repair buffer (megabytes).
+ParBuffer=<%= @par_buffer %>
+
+# Number of threads to use during par-repair (0-99).
+ParThreads=<%= @par_threads %>
+
+# Files to ignore during par-check.
+<%- unless @par_ignore_ext.nil? -%>
+ParIgnoreExt=<%= @par_ignore_ext.join(',') %>
+<%- end -%>
+
+# What to do if download health drops below critical health (delete,
+# pause, none).
+HealthCheck=<%= @health_check %>
+
+# Maximum allowed time for par-repair (minutes).
+ParTimeLimit=<%= @par_time_limit %>
+
+# Pause download queue during check/repair (yes, no).
+ParPauseQueue=<%= @par_pause_queue %>
+
+# Cleanup download queue after successful check/repair (yes, no).
+ParCleanupQueue=<%= @par_cleanup_queue %>

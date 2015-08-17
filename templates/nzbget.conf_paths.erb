@@ -1,0 +1,35 @@
+##############################################################################
+### PATHS                                                                  ###
+
+# Root directory for all tasks.
+MainDir=<%= @main_dir %>
+
+# Destination directory for downloaded files.
+DestDir=<%= @dest_dir %>
+
+# Directory to store intermediate files.
+InterDir=<%= @inter_dir %>
+
+# Directory for incoming nzb-files.
+NzbDir=<%= @nzb_dir %>
+
+# Directory to store program state.
+QueueDir=<%= @queue_dir %>
+
+# Directory to store temporary files.
+TempDir=<%= @temp_dir %>
+
+# Directory with web-interface files.
+WebDir=<%=  @temp_dir %>
+
+# Directory with post-processing and other scripts.
+ScriptDir=<%= @script_dir %>
+
+# Lock-file for daemon-mode, POSIX only.
+LockFile=<%= @lock_file %>
+
+# Where to store log file, if it needs to be created.
+LogFile=<%= @log_file %>
+
+# Configuration file template.
+ConfigTemplate=<%= @config_template %>

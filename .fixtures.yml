@@ -1,0 +1,13 @@
+fixtures:
+  forge_modules:
+    stdlib:
+      repo: 'puppetlabs/stdlib'
+      ref: '4.8.0'
+    wget:
+      repo: 'maestrodev/wget'
+      ref: '1.7.0'
+    concat:
+      repo: 'puppetlabs/concat'
+      ref: '1.2.4'
+  symlinks:
+    nzbget: "#{source_dir}"

@@ -1,0 +1,23 @@
+##############################################################################
+### UNPACK                                                                 ###
+
+# Unpack downloaded nzb-files (yes, no).
+Unpack=<%= @unpack %>
+
+# Pause download queue during unpack (yes, no).
+UnpackPauseQueue=<%= @unpack_pause_queue %>
+
+# Delete archive files after successful unpacking (yes, no).
+UnpackCleanupDisk=<%= @unpack_cleanup_disk %>
+
+# Full path to unrar executable.
+UnrarCmd=<%= @unrar_cmd %>
+
+# Full path to 7-Zip executable.
+SevenZipCmd=<%= @seven_zip_cmd %>
+
+# Files to delete after successful download.
+ExtCleanupDisk=<%= @ext_cleanup_disk %>
+
+# Path to file containing unpack passwords.
+UnpackPassFile=<%= @unpack_pass_file %>

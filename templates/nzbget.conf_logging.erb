@@ -1,0 +1,39 @@
+##############################################################################
+### LOGGING                                                                ###
+
+# How to use log file (none, append, reset, rotate).
+WriteLog=<%= @write_log %>
+
+# Log file rotation period (days).
+RotateLog=<%= @rotate_log %>
+
+# How error messages must be printed (screen, log, both, none).
+ErrorTarget=<%= @error_target %>
+
+# How warning messages must be printed (screen, log, both, none).
+WarningTarget=<%= @warning_target %>
+
+# How info messages must be printed (screen, log, both, none).
+InfoTarget=<%= @info_target %>
+
+# How detail messages must be printed (screen, log, both, none).
+DetailTarget=<%= @detail_target %>
+
+# How debug messages must be printed (screen, log, both, none).
+DebugTarget=<%= @debug_target %>
+
+# Number of messages stored in buffer and available for remote
+# clients (messages).
+LogBufferSize=<%= @log_buffer_size %>
+
+# Create log for each downloaded nzb-file (yes, no).
+NzbLog=<%= @nzb_log %>
+
+# Create a log of all broken files (yes, no).
+BrokenLog=<%= @broken_log %>
+
+# Create memory dump (core-file) on abnormal termination, Linux only (yes, no).
+DumpCore=<%= @dump_core %>
+
+# Local time correction (hours or minutes).
+TimeCorrection=<%= @time_correction %>

@@ -1,0 +1,46 @@
+##############################################################################
+### NEWS-SERVERS                                                           ###
+
+<%- if @servers.length > 0 -%>
+    <%- @servers.each do |server| -%>
+        <%- server_num = @servers.index(server) + 1 -%>
+# Use this news server (yes, no).
+Server<%= server_num %>.Active=<%= server['active'].to_s %>
+
+# Name of news server.
+Server<%= server_num %>.Name=<%= server['name'].to_s %>
+
+# Level (priority) of news server (0-99).
+Server<%= server_num %>.Level=<%= server['level'].to_i %>
+
+# Group of news server (0-99).
+Server<%= server_num %>.Group=<%= server['group'].to_i %>
+
+# Host name of news server.
+Server<%= server_num %>.Host=<%= server['host'].to_s %>
+
+# Port to connect to (1-65535).
+Server<%= server_num %>.Port=<%= server['port'].to_i %>
+
+# User name to use for authentication.
+Server<%= server_num %>.Username=<%= server['username'].to_s %>
+
+# Password to use for authentication.
+Server<%= server_num %>.Password=<%= server['password'].to_s %>
+
+# Server requires "Join Group"-command (yes, no).
+Server<%= server_num %>.JoinGroup=<%= server['join_group'].to_s %>
+
+# Encrypted server connection (TLS/SSL) (yes, no).
+Server<%= server_num %>.Encryption=<%= server['encryption'].to_s %>
+
+# Cipher to use for encrypted server connection.
+Server<%= server_num %>.Cipher=<%= server['cipher'].to_s %>
+
+# Maximum number of simultaneous connections to this server (0-999).
+Server<%= server_num %>.Connections=<%= server['connections'].to_i %>
+
+# Server retention time (days).
+Server<%= server_num %>.Retention=<%= server['retention'].to_i %>
+    <%- end -%>
+<%- end -%>

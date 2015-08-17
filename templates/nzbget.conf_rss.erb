@@ -1,0 +1,28 @@
+##############################################################################
+### RSS FEEDS                                                              ###
+
+<%- if @rss_feeds.length > 0 -%>
+    <%- @rss_feeds.each do |feed| -%>
+        <%- feed_num = @rss_feeds.index(feed) + 1 -%>
+# Name of RSS Feed.
+Feed<%= feed_num %>.Name=<%= feed['name'].to_s %>
+
+# Address (URL) of RSS Feed.
+Feed<%= feed_num %>.URL=<%= feed['url'].to_s %>
+
+# Filter rules for items.
+Feed<%= feed_num %>.Filter=<%= feed['filter'].to_s %>
+
+# How often to check for new items (minutes).
+Feed<%= feed_num %>.Interval=<%= feed['interval'].to_i %>
+
+# Add nzb-files as paused (yes, no).
+Feed<%= feed_num %>.PauseNzb=<%= feed['pause_nzb'].to_s %>
+
+# Category for added nzb-files.
+Feed<%= feed_num %>.Category=<%= feed['category'].to_s %>
+
+# Priority for added nzb-files (number).
+Feed<%= feed_num %>.Priority=<%= feed['priority'].to_i %>
+    <%- end -%>
+<%- end -%>

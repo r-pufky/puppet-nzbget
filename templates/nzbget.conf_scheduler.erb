@@ -1,0 +1,21 @@
+##############################################################################
+### SCHEDULER                                                              ###
+
+<%- if @tasks.length > 0 -%>
+    <%- @tasks.each do |task| -%>
+        <%- task_num = @tasks.index(task) + 1 -%>
+# Time to execute the command (HH:MM).
+Task<%= task_num %>.Time=<%= task['time'].to_s %>
+
+# Week days to execute the command (1-7).
+Task<%= task_num %>.WeekDays=<%= task['week_days'].to_s %>
+
+# Command to be executed (PauseDownload, UnpauseDownload, PausePostProcess,
+# UnpausePostProcess, PauseScan, UnpauseScan, DownloadRate, Script, Process,
+# ActivateServer, DeactivateServer, FetchFeed).
+Task<%= task_num %>.Command=<%= task['command'].to_s %>
+
+# Parameters for the command if needed.
+Task<%= task_num %>.Param=<%= task['param'].to_s %>
+    <%- end -%>
+<%- end -%>

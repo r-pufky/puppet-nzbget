@@ -1,0 +1,49 @@
+##############################################################################
+### SECURITY                                                               ###
+
+# IP on which NZBGet server listen and which clients use to contact NZBGet.
+ControlIP=<%= @control_ip %>
+
+# Port which NZBGet server and remote client use (1-65535).
+ControlPort=<%= @control_port %>
+
+# User name which NZBGet server and remote client use.
+ControlUsername=<%= @control_username %>
+
+# Password which NZBGet server and remote client use.
+ControlPassword=<%= @control_password %>
+
+# User name for restricted access.
+RestrictedUsername=<%= @restricted_username %>
+
+# Password for restricted access.
+RestrictedPassword=<%= @restricted_password %>
+
+# User name to add downloads via RPC-API.
+AddUsername=<%= @add_username %>
+
+# Password for user with add downloads access.
+AddPassword=<%= @add_password %>
+
+# Secure control of NZBGet server (yes, no).
+SecureControl=<%= @secure_control %>
+
+# Port which NZBGet server and remote client use for encrypted
+# communication (1-65535).
+SecurePort=<%= @secure_port %>
+
+# Full path to certificate file for encrypted communication.
+SecureCert=<%= @secure_cert %>
+
+# Full path to key file for encrypted communication.
+SecureKey=<%= @secure_key %>
+
+# IP-addresses allowed to connect without authorization.
+AuthorizedIP=<%= @authorized_ip %>
+
+# User name for daemon-mode, POSIX only.
+DaemonUsername=<%= @daemon_username %>
+
+# Specify default umask (affects file permissions) for newly created
+# files, POSIX only (000-1000).
+UMask=<%= @umask %>

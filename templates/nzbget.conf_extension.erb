@@ -1,0 +1,21 @@
+##############################################################################
+### EXTENSION SCRIPTS                                                      ###
+
+# Default list of post-processing scripts to execute after the download
+# of nzb-file is completed and possibly par-checked/repaired and unpacked.
+PostScript=<%= @post_script %>
+
+# List of scan scripts to execute before a nzb-file is added to queue.
+ScanScript=<%= @scan_script %>
+
+# List of queue scripts to execute on queue events.
+QueueScript=<%= @queue_script %>
+
+# Execution order for scripts.
+ScriptOrder=<%= @script_order %>
+
+# Pause download queue during executing of postprocess-script (yes, no).
+ScriptPauseQueue=<%= @script_pause_queue %>
+
+# Minimum interval between calls of queue-scripts (seconds).
+EventInterval=<%= @event_interval %>

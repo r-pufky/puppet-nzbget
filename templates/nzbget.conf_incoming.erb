@@ -1,0 +1,15 @@
+##############################################################################
+### INCOMING NZBS                                                          ###
+
+# Create subdirectory with category-name in destination-directory (yes, no).
+AppendCategoryDir=<%= @append_category_dir %>
+
+# How often incoming-directory (option <NzbDir>) must be checked for new
+# nzb-files (seconds).
+NzbDirInterval=<%= @nzb_dir_interval %>
+
+# How old nzb-file should at least be for it to be loaded to queue (seconds).
+NzbDirFileAge=<%= @nzb_dir_file_age %>
+
+# Check for duplicate titles (yes, no).
+DupeCheck=<%= @dupe_check %>
