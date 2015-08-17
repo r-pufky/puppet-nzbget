@@ -23,8 +23,8 @@ ParBuffer=<%= @par_buffer %>
 # Number of threads to use during par-repair (0-99).
 ParThreads=<%= @par_threads %>
 
-# Files to ignore during par-check.
 <%- unless @par_ignore_ext.nil? -%>
+# Files to ignore during par-check.
 ParIgnoreExt=<%= @par_ignore_ext.join(',') %>
 <%- end -%>
 

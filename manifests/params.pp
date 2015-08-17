@@ -127,7 +127,7 @@ class nzbget::params {
   $par_check         = 'auto'
   $par_cleanup_queue = 'yes'
   $par_ignore_ect    = ['.sfv', '.nzb', '.nfo']
-  $par_parse_queue   = 'no'
+  $par_pause_queue   = 'no'
   $par_quick         = 'yes'
   $par_rename        = 'yes'
   $par_repair        = 'yes'

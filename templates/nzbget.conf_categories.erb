@@ -10,16 +10,18 @@ Category<%= category_num %>.Name=<%= category['name'].to_s %>
 # Destination directory for this category.
 Category<%= category_num %>.DestDir=<%= category['dest_dir'].to_s %>
 
+        <%- unless category['unpack'].nil? -%>
 # Unpack downloaded nzb-files (yes, no).
 Category<%= category_num %>.Unpack=<%= category['unpack'].to_s %>
+        <%- end -%>
 
-# Default list of post-processing scripts.
         <%- unless category['post_script'].nil? -%>
+# Default list of post-processing scripts.
 Category<%= category_num %>.PostScript=<%= category['post_script'].join(',') %>
         <%- end -%>
 
-# List of aliases.
         <%- unless category['aliases'].nil? -%>
+# List of aliases.
 Category<%= category_num %>.Aliases=<%= category['aliases'].join(',') %>
         <%- end -%>
     <%- end -%>
