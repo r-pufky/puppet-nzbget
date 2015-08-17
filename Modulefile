@@ -8,3 +8,5 @@ description   ''
 project_page  ''
 
 dependency 'puppetlabs/stdlib'
+dependency 'maestrodev/wget'
+dependency 'puppetlabs/concat'
