@@ -20,65 +20,78 @@ class nzbget::config {
   concat::fragment { 'categories':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_categories.erb'),
+    order   => '07',
   }
 
   concat::fragment { 'display':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_display.erb'),
+    order   => '17',
   }
 
   concat::fragment { 'download':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_download.erb'),
+    order   => '13',
   }
 
   concat::fragment { 'extension':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_extension.erb'),
+    order   => '23',
   }
 
   concat::fragment { 'incoming':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_incoming.erb'),
+    order   => '11',
   }
 
   concat::fragment { 'logging':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_logging.erb'),
+    order   => '15',
   }
 
   concat::fragment { 'par':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_par.erb'),
+    order   => '19',
   }
 
   concat::fragment { 'paths':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_paths.erb'),
+    order   => '01',
   }
 
   concat::fragment { 'rss':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_rss.erb'),
+    order   => '09',
   }
 
   concat::fragment { 'scheduler':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_scheduler.erb'),
+    order   => '17',
   }
 
   concat::fragment { 'security':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_security.erb'),
+    order   => '05',
   }
 
   concat::fragment { 'servers':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_rss.erb'),
+    order   => '03',
   }
 
   concat::fragment { 'unpack':
     target  => $::nzbget::config_file,
     content => template('nzbget/nzbget.conf_unpack.erb'),
+    order   => '21',
   }
 }
