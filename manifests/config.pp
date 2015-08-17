@@ -85,7 +85,7 @@ class nzbget::config {
 
   concat::fragment { 'servers':
     target  => $::nzbget::config_file,
-    content => template('nzbget/nzbget.conf_rss.erb'),
+    content => template('nzbget/nzbget.conf_servers.erb'),
     order   => '03',
   }
 
