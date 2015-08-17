@@ -13,7 +13,7 @@ class nzbget::service {
     hasstatus  => false,
     pattern    => 'nzbget\s*-D',
     provider   => 'base',
-    start      => "${::nzbget::install_dir}/nzbget -D",
+    start      => "${::nzbget::install_dir}/nzbget -D -c ${::nzbget::config_file}",
     stop       => "${::nzbget::install_dir}/nzbget -Q",
   }
 }
