@@ -2,8 +2,8 @@
 ### CATEGORIES                                                             ###
 
 <%- if !@categories.nil? and @categories.length > 0 -%>
-    <%- @categories.each do |category| -%>
-        <%- category_num = @categories.index(category) + 1 -%>
+    <%- @categories.each_with_index do |category, i| -%>
+        <%- category_num = i + 1 -%>
 # Category name.
 Category<%= category_num %>.Name=<%= category['name'].to_s %>
 

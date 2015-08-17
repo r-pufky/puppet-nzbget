@@ -2,8 +2,8 @@
 ### SCHEDULER                                                              ###
 
 <%- if !@tasks.nil? and @tasks.length > 0 -%>
-    <%- @tasks.each do |task| -%>
-        <%- task_num = @tasks.index(task) + 1 -%>
+    <%- @tasks.each_with_index do |task, i| -%>
+        <%- task_num = i + 1 -%>
 # Time to execute the command (HH:MM).
 Task<%= task_num %>.Time=<%= task['time'].to_s %>
 

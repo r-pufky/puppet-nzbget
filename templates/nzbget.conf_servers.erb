@@ -2,8 +2,8 @@
 ### NEWS-SERVERS                                                           ###
 
 <%- if !@servers.nil? and @servers.length > 0 -%>
-    <%- @servers.each do |server| -%>
-        <%- server_num = @servers.index(server) + 1 -%>
+    <%- @servers.each_with_index do |server, i| -%>
+        <%- server_num = i + 1 -%>
 # Use this news server (yes, no).
 Server<%= server_num %>.Active=<%= server['active'].to_s %>
 

@@ -2,8 +2,8 @@
 ### RSS FEEDS                                                              ###
 
 <%- if !@rss.nil? and @rss_feeds.length > 0 -%>
-    <%- @rss_feeds.each do |feed| -%>
-        <%- feed_num = @rss_feeds.index(feed) + 1 -%>
+    <%- @rss_feeds.each_with_index do |feed,i| -%>
+        <%- feed_num = i + 1 -%>
 # Name of RSS Feed.
 Feed<%= feed_num %>.Name=<%= feed['name'].to_s %>
 
