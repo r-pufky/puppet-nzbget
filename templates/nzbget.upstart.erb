@@ -1,0 +1,17 @@
+description "NZBGet upstart script"
+author "Alejandro Figueroa"
+
+setuid <%= @user %>
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn
+
+pre-start script
+exec <%= "#{@install_dir}/nzbget -D -c #{@config_file}" %>
+end script
+
+post-stop script
+exec <%= "#{@install_dir}/nzbget -Q" %>
+end script

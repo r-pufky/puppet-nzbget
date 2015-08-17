@@ -44,6 +44,8 @@ describe 'nzbget' do
           it { is_expected.to contain_concat__fragment('servers') }
           it { is_expected.to contain_concat__fragment('unpack') }
 
+          it { is_expected.to contain_file('/etc/init/nzbget.conf') \
+            .that_notifies('Service[nzbget]') }
           it { is_expected.to contain_service('nzbget') }
         end
       end
