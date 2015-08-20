@@ -15,7 +15,7 @@ class nzbget::service {
   service { 'nzbget':
     ensure     => $::nzbget::service_ensure,
     enable     => $::nzbget::service_enable,
-    hasrestart => false,
+    hasrestart => true,
     hasstatus  => true,
     provider   => 'upstart',
   }
