@@ -133,6 +133,8 @@ class nzbget (
   $script_order       = $::nzbget::params::script_order,
   $script_pause_queue = $::nzbget::params::script_pause_queue,
 
+  $custom_config = [],
+
   # Service params
   $service_ensure = $::nzbget::params::service_ensure,
   $service_enable = $::nzbget::params::service_enable,
@@ -146,7 +148,7 @@ class nzbget (
   # Config params
   validate_absolute_path($config_file)
   validate_array($servers, $categories, $rss_feeds, $tasks,
-  $par_ignore_ect, $ext_cleanup_disk)
+  $par_ignore_ect, $ext_cleanup_disk, $custom_config)
   validate_integer($control_port)
   validate_integer($secure_port)
   validate_integer($nzb_dir_file_age)
