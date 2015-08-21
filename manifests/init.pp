@@ -149,7 +149,6 @@ class nzbget (
   $par_ignore_ect, $ext_cleanup_disk)
   validate_integer($control_port)
   validate_integer($secure_port)
-  validate_integer($umask)
   validate_integer($nzb_dir_file_age)
   validate_integer($nzb_dir_interval)
   validate_integer($article_cache)
@@ -189,7 +188,7 @@ class nzbget (
   $par_repair, $par_scan, $seven_zip_cmd, $unpack,
   $unpack_cleanup_disk, $unpack_pass_file, $unpack_pause_queue,
   $unrar_cmd, $post_script, $queue_script, $scan_script,
-  $script_order, $script_pause_queue)
+  $script_order, $script_pause_queue, $umask)
 
   # Service params
   validate_bool($service_enable, $service_ensure)
