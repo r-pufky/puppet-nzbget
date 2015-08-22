@@ -1,6 +1,8 @@
 ##############################################################################
 ### CUSTOM OPTIONS                                                         ###
 
-<%- @custom_config.each do |option| -%>
+<%- unless @custom_config.nil? -%>
+    <%- @custom_config.each do |option| -%>
 <%= option %>
+    <%- end -%>
 <%- end -%>

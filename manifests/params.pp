@@ -56,7 +56,7 @@ class nzbget::params {
   $secure_control      = 'no'
   $secure_key          = ''
   $secure_port         = 6791
-  $umask               = 1000
+  $umask               = '1000'
 
   $categories = [ {
                   'name'        => 'movies',
