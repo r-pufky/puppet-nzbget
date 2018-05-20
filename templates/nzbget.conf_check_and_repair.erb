@@ -1,0 +1,18 @@
+##############################################################################
+### CHECK AND REPAIR                                                       ###
+
+ParCheck=<%= scope['::nzbget::par_check'] %>
+ParRepair=<%= scope['::nzbget::par_repair'] ? 'yes' : 'no' %>
+ParScan=<%= scope['::nzbget::par_scan'] %>
+ParQuick=<%= scope['::nzbget::par_quick'] ? 'yes' : 'no' %>
+ParBuffer=<%= scope['::nzbget::par_buffer'] %>
+ParThreads=<%= scope['::nzbget::par_threads'] %>
+ParIgnoreExt=<%= scope['::nzbget::par_ignore_ext'].join(',') if scope['::nzbget::par_ignore_ext'] %>
+ParRename=<%= scope['::nzbget::par_rename'] ? 'yes' : 'no' %>
+RarRename=<%= scope['::nzbget::rar_rename'] ? 'yes' : 'no' %>
+DirectRename=<%= scope['::nzbget::direct_rename'] ? 'yes' : 'no' %>
+HealthCheck=<%= scope['::nzbget::health_check'] %>
+ParTimeLimit=<%= scope['::nzbget::par_time_limit'] %>
+ParPauseQueue=<%= scope['::nzbget::par_pause_queue'] %>
+
+

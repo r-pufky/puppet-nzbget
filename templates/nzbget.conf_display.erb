@@ -1,18 +1,10 @@
 ##############################################################################
 ### DISPLAY (TERMINAL)                                                     ###
 
-# Set screen-outputmode (loggable, colored, curses).
-OutputMode=<%= @output_mode %>
+OutputMode=<%= scope['::nzbget::output_mode'] %>
+CursesNzbName=<%= scope['::nzbget::curses_nzb_name'] ? 'yes' : 'no' %>
+CursesGroup=<%= scope['::nzbget::curses_group'] ? 'yes' : 'no' %>
+CursesTime=<%= scope['::nzbget::curses_time'] ? 'yes' : 'no' %>
+UpdateInterval=<%= scope['::nzbget::update_interval'] %>
 
-# Shows NZB-Filename in file list in curses-outputmode (yes, no).
-CursesNzbName=<%= @curses_nzb_name %>
 
-# Show files in groups (NZB-files) in queue list in curses-outputmode (yes, no).
-CursesGroup=<%= @curses_group %>
-
-# Show timestamps in message list in curses-outputmode (yes, no).
-CursesTime=<%= @curses_time %>
-
-# Update interval for Frontend-output in console mode or remote client
-# mode (milliseconds).
-UpdateInterval=<%= @update_interval %>

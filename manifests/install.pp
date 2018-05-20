@@ -2,29 +2,43 @@
 #
 # This class is called from nzbget for install.
 #
+
 class nzbget::install {
+  if ($::nzbget::manage_ppa) {
+    apt::ppa { 'ppa:modriscoll/nzbget': }
 
-  wget::fetch { 'nzbget download':
-    source      => $::nzbget::source_url,
-    destination => $::nzbget::destination_file,
-  }
+    apt::key { 'ppa:modriscoll/nzbget':
+      id => '0x0778B73662C73F57DB254490780F1E2D6CDE748F'
+    }
 
-  exec { 'nzbget install':
-    command => "sh ${::nzbget::destination_file} --destdir \
-    ${::nzbget::install_dir}",
-    creates => $::nzbget::install_dir,
-    path    => '/bin',
-  }
-
-  if $::nzbget::manage_user {
-    user { $::nzbget::user:
+    package { 'nzbget':
       ensure     => present,
-      comment    => 'NZBGet user',
-      home       => $::nzbget::install_dir,
-      managehome => false,
-      system     => true,
+      require    => [
+        Apt::Ppa['ppa:modriscoll/nzbget'],
+        Apt::Key['ppa:modriscoll/nzbget'],
+        Class['apt::update'],
+      ]
     }
   }
 
-  Wget::Fetch['nzbget download'] -> Exec['nzbget install']
+  package { $::nzbget::params::packages:
+    ensure       => latest,
+    require      => Class['apt::update'],
+  }
+
+  group { $::nzbget::group:
+      ensure     => present,
+  } ->
+  if ($::nzbget::manage_user) {
+    user { $::nzbget::user:
+      ensure     => present,
+      comment    => 'NZBGet [Puppet Managed]',
+      home       => $::nzbget::service_dir,
+      membership => minimum,
+      groups     => $::nzbget::params::user_resource_group,
+      managehome => true,
+      system     => true,
+      password   => '!',
+    }
+  }
 }

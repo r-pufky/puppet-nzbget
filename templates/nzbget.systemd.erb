@@ -1,0 +1,21 @@
+[Unit]
+Description=NZBGet Daemon
+Documentation=http://nzbget.net/Documentation
+After=network.target
+<% if not scope['::nzbget::params::daemon_required_mounts'].nil? and scope['::nzbget::params::daemon_required_mounts'] -%>
+RequiresMountsFor=<%= scope['::nzbget::params::daemon_required_mounts'].join(' ') %>
+<% end -%>
+
+[Service]
+User=<%= scope['::nzbget::user'] %>
+Group=<%= scope['::nzbget::group'] %>
+Type=forking
+ExecStart=/usr/bin/nzbget -c "<%= scope['::nzbget::params::config_file'] %>" -D
+ExecStop=/usr/bin/nzbget -Q
+ExecReload=/usr/bin/nzbget -O
+KillMode=process
+Restart=on-failure
+
+
+[Install]
+WantedBy=multi-user.target

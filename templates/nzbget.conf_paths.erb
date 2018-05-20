@@ -1,35 +1,18 @@
 ##############################################################################
 ### PATHS                                                                  ###
 
-# Root directory for all tasks.
-MainDir=<%= @main_dir %>
+MainDir=<%= scope['::nzbget::params::main_dir'] %>
+DestDir=<%= scope['::nzbget::params::destination_dir'] %>
+InterDir=<%= scope['::nzbget::params::intermediate_dir'] %>
+NzbDir=<%= scope['::nzbget::params::nzb_dir'] %>
+QueueDir=<%= scope['::nzbget::params::queue_dir'] %>
+TempDir=<%= scope['::nzbget::params::temp_dir'] %>
+WebDir=<%= scope['::nzbget::params::web_dir'] %>
+ScriptDir=<%= scope['::nzbget::params::script_dir'].join(',') if scope['::nzbget::params::script_dir'] %>
+LockFile=<%= scope['::nzbget::params::lock_file'] %>
+LogFile=<%= scope['::nzbget::params::log_file'] %>
+ConfigTemplate=<%= scope['::nzbget::params::config_template'] %>
+RequiredDir=<%= scope['::nzbget::params::required_dir_config_mounts'].join(',') if scope['::nzbget::params::required_dir_config_mounts'] %>
+CertStore=<%= scope['::nzbget::params::cert_store'] %>
 
-# Destination directory for downloaded files.
-DestDir=<%= @dest_dir %>
 
-# Directory to store intermediate files.
-InterDir=<%= @inter_dir %>
-
-# Directory for incoming nzb-files.
-NzbDir=<%= @nzb_dir %>
-
-# Directory to store program state.
-QueueDir=<%= @queue_dir %>
-
-# Directory to store temporary files.
-TempDir=<%= @temp_dir %>
-
-# Directory with web-interface files.
-WebDir=<%= @web_dir %>
-
-# Directory with post-processing and other scripts.
-ScriptDir=<%= @script_dir %>
-
-# Lock-file for daemon-mode, POSIX only.
-LockFile=<%= @lock_file %>
-
-# Where to store log file, if it needs to be created.
-LogFile=<%= @log_file %>
-
-# Configuration file template.
-ConfigTemplate=<%= @config_template %>

@@ -1,72 +1,22 @@
 ##############################################################################
 ### DOWNLOAD QUEUE                                                         ###
 
-# Save download queue to disk (yes, no).
-SaveQueue=<%= @save_queue %>
+SaveQueue=<%= scope['::nzbget::save_queue'] ? 'yes' : 'no' %>
+FlushQueue=<%= scope['::nzbget::flush_queue'] ? 'yes' : 'no' %>
+ReloadQueue=<%= scope['::nzbget::reload_queue'] ? 'yes' : 'no' %>
+ContinuePartial=<%= scope['::nzbget::continue_partial'] ? 'yes' : 'no' %>
+PropagationDelay=<%= scope['::nzbget::propagation_delay'] %>
+Decode=<%= scope['::nzbget::decode'] ? 'yes' : 'no' %>
+ArticleCache=<%= scope['::nzbget::article_cache'] %>
+DirectWrite=<%= scope['::nzbget::direct_write'] ? 'yes' : 'no' %>
+WriteBuffer=<%= scope['::nzbget::write_buffer'] %>
+CrcCheck=<%= scope['::nzbget::crc_check'] ? 'yes' : 'no' %>
+FileNaming=<%= scope['::nzbget::file_naming'] %>
+ReorderFiles=<%= scope['::nzbget::reorder_files'] ? 'yes' : 'no' %>
+PostStrategy=<%= scope['::nzbget::post_strategy'] %>
+DiskSpace=<%= scope['::nzbget::disk_space'] %>
+NzbCleanupDisk=<%= scope['::nzbget::nzb_cleanup_disk'] ? 'yes' : 'no' %>
+KeepHistory=<%= scope['::nzbget::keep_history'] %>
+FeedHistory=<%= scope['::nzbget::feed_history'] %>
 
-# Reload download queue on start, if it exists (yes, no).
-ReloadQueue=<%= @reload_queue %>
 
-# Continue download of partially downloaded files (yes, no).
-ContinuePartial=<%= @continue_partial %>
-
-# Propagation delay to your news servers (minutes).
-PropagationDelay=<%= @propagation_delay %>
-
-# Decode articles (yes, no).
-Decode=<%= @decode %>
-
-# Memory limit for article cache (megabytes).
-ArticleCache=<%= @article_cache %>
-
-# Write decoded articles directly into destination output file (yes, no).
-DirectWrite=<%= @direct_write %>
-
-# Memory limit for per article write buffer (kilobytes).
-WriteBuffer=<%= @write_buffer %>
-
-# Check CRC of downloaded and decoded articles (yes, no).
-CrcCheck=<%= @crc_check %>
-
-# How many retries should be attempted if a download error occurs (0-99).
-Retries=<%= @retries %>
-
-# Wait interval between retries (seconds).
-RetryInterval=<%= @retry_interval %>
-
-# Connection timeout for article downloading (seconds).
-ArticleTimeout=<%= @article_timeout %>
-
-# Connection timeout for URL fetching (seconds).
-UrlTimeout=<%= @url_timeout %>
-
-# Timeout until a download-thread should be killed (seconds).
-TerminateTimeout=<%= @terminate_timeout %>
-
-# Set the maximum download rate on program start (kilobytes/sec).
-DownloadRate=<%= @download_rate %>
-
-# Accurate speed rate calculation (yes, no).
-AccurateRate=<%= @accurate_rate %>
-
-# Pause if disk space gets below this value (megabytes).
-DiskSpace=<%= @disk_space %>
-
-# Delete already downloaded files from disk when nzb-file is deleted
-# (yes, no).
-DeleteCleanupDisk=<%= @delete_cleanup_disk %>
-
-# Delete source nzb-file when it is not needed anymore (yes, no).
-NzbCleanupDisk=<%= @nzb_cleanup_disk %>
-
-# Keep the history of downloaded nzb-files (days).
-KeepHistory=<%= @keep_history %>
-
-# Keep the history of outdated feed items (days).
-FeedHistory=<%= @feed_history %>
-
-# Maximum number of simultaneous connections for nzb URL downloads (0-999).
-UrlConnections=<%= @url_connections %>
-
-# Force URL-downloads even if download queue is paused (yes, no).
-UrlForce=<%= @url_force %>

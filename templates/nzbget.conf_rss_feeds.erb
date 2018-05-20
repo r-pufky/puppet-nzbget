@@ -1,0 +1,20 @@
+##############################################################################
+### RSS FEEDS                                                              ###
+<%- if !scope['::nzbget::feeds'].nil? and scope['::nzbget::feeds'].length > 0 -%>
+    <%- scope['::nzbget::feeds'].each_with_index do |feed,i| -%>
+        <%- feed_num = i + 1 -%>
+
+# <%= feed['name'].to_s %>
+Feed<%= feed_num %>.Name=<%= feed['name'].to_s %>
+Feed<%= feed_num %>.URL=<%= feed['url'].to_s %>
+Feed<%= feed_num %>.Filter=<%= feed['filter'].join('%') if feed['filter'] %>
+Feed<%= feed_num %>.Interval=<%= feed['interval'].to_i %>
+Feed<%= feed_num %>.Backlog=<%= feed['backlog'] ? 'yes' : 'no' %>
+Feed<%= feed_num %>.PauseNzb=<%= feed['pause_nzb'] ? 'yes' : 'no' %>
+Feed<%= feed_num %>.Category=<%= feed['category'].to_s %>
+Feed<%= feed_num %>.Priority=<%= feed['priority'].to_i %>
+Feed<%= feed_num %>.Extensions=<%= feed['extensions'].join(',') if feed['extensions'] %>
+  <%- end -%>
+<%- end -%>
+
+

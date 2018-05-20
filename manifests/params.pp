@@ -1,165 +1,251 @@
 # == Class nzbget::params
 #
 # This class is meant to be called from nzbget.
-# It sets variables according to platform.
+# It sets service params according to user preferences.
 #
+
+# This function will apply all filters and return a unique, filtered array.
+function nzb_dir_filter(Array $dirs, Array $filters) >> Array {
+  $result = $filters.map |$filter| {
+    if ($filter == '/') {
+      $single_filter = dirtree($dirs)
+    } else {
+      $single_filter = dirtree($dirs.filter |$f| { $filter in $f }, $filter)
+    }
+  }
+  delete(unique(flatten($result)), '')
+}
+
 class nzbget::params {
-  # Install params
-  $destination_file = '/srv/nzbget-bin-linux.run'
-  $install_dir      = '/srv/nzbget'
-  $manage_user      = true
-  $source_url       = 'https://github.com/nzbget/nzbget/releases/download/v15.0/nzbget-15.0-bin-linux.run'
-  $user             = 'nzbget'
+  $packages = [
+    'unrar',
+    'par2',
+    'parchive',
+  ]
 
-  # Config params
-  $config_file = "${install_dir}/nzbget.conf"
+  $masks = [$::nzbget::manage_service_dirs[1], $::nzbget::manage_data_dirs[1]]
 
-  $config_template = '${AppDir}/webui/nzbget.conf.template'
-  $dest_dir        = '${MainDir}/completed'
-  $inter_dir       = '${MainDir}/intermediate'
-  $lock_file       = '${MainDir}/nzbget.lock'
-  $log_file        = '${MainDir}/nzbget.log'
-  $main_dir        = '${AppDir}/downloads'
-  $nzb_dir         = '${MainDir}/nzb'
-  $queue_dir       = '${MainDir}/queue'
-  $script_dir      = '${AppDir}/scripts'
-  $temp_dir        = '${MainDir}/tmp'
-  $web_dir         = '${AppDir}/webui'
+  # TODO: once ubuntu 14 support is removed from puppet, convert to systemd.
+  if ($facts['os']['release']['full'] == '16.04') {
+    $use_systemd = true
+  } else {
+    $use_systemd = false
+  }
 
-  $servers = [{
-              'active'      => 'yes',
-              'name'        => '',
-              'level'       => 0,
-              'group'       => 0,
-              'host'        => 'my.newsserver.com',
-              'port'        => 119,
-              'username'    => 'user',
-              'password'    => 'pass',
-              'join_group'  => 'no',
-              'encryption'  => 'no',
-              'cipher'      => '',
-              'connections' => 4,
-              'retention'   => 0
-              }]
+  if (!is_absolute_path($::nzbget::service_dir)) {
+    fail "nzbget::service_dir MUST be an absolute path [${::nzbget::service_dir}]."
+  }
 
-  $add_password        = ''
-  $add_username        = ''
-  $authorized_ip       = '127.0.0.1'
-  $control_ip          = '0.0.0.0'
-  $control_password    = 'tegbzn6789'
-  $control_port        = 6789
-  $control_username    = 'nzbget'
-  $daemon_username     = $user
-  $restricted_password = ''
-  $restricted_username = ''
-  $secure_cert         = ''
-  $secure_control      = 'no'
-  $secure_key          = ''
-  $secure_port         = 6791
-  $umask               = '1000'
+  if (!is_absolute_path($::nzbget::config_file)) {
+    $config_file = "${::nzbget::service_dir}/${::nzbget::config_file}"
+    $config_file_dir = dirname($config_file)
+  } else {
+    $config_file = $::nzbget::config_file
+    $config_file_dir = dirname($config_file)
+  }
 
-  $categories = [ {
-                  'name'        => 'movies',
-                  'dest_dir'    => '',
-                  'unpack'      => 'yes',
-                  'post_script' => [],
-                  'aliases'     => [],
-                  },
-                  { 'name' => 'Series' },
-                  { 'name' => 'Music' },
-                  { 'name' => 'Software' }]
+  if (!is_absolute_path($::nzbget::main_dir)) {
+    $main_dir = "${::nzbget::service_dir}/${::nzbget::main_dir}"
+  } else {
+    $main_dir = $::nzbget::main_dir
+  }
 
-  $rss_feeds = []
+  if (!is_absolute_path($::nzbget::destination_dir)) {
+    $destination_dir = "${::nzbget::service_dir}/${::nzbget::destination_dir}"
+  } else {
+    $destination_dir = $::nzbget::destination_dir
+  }
 
-  $append_category_dir = 'yes'
-  $dupe_check          = 'yes'
-  $nzb_dir_file_age    = 60
-  $nzb_dir_interval    = 5
-
-  $accurate_rate       = 'no'
-  $article_cache       = 100
-  $article_timeout     = 60
-  $continue_partial    = 'yes'
-  $crc_check           = 'yes'
-  $decode              = 'yes'
-  $delete_cleanup_disk = 'yes'
-  $direct_write        = 'yes'
-  $disk_space          = 250
-  $download_rate       = 0
-  $feed_history        = 7
-  $keep_history        = 30
-  $nzb_cleanup_disk    = 'yes'
-  $propagation_delay   = 0
-  $reload_queue        = 'yes'
-  $retries             = 3
-  $retry_interval      = 10
-  $save_queue          = 'yes'
-  $terminate_timeout   = 600
-  $url_connections     = 4
-  $url_force           = 'yes'
-  $url_timeout         = 60
-  $write_buffer        = 1024
-
-  $broken_log      = 'yes'
-  $debug_target    = 'log'
-  $detail_target   = 'log'
-  $dump_core       = 'no'
-  $error_target    = 'both'
-  $info_target     = 'both'
-  $log_buffer_size = 1000
-  $nzb_log         = 'yes'
-  $rotate_log      = 3
-  $time_correction = 0
-  $warning_target  = 'both'
-  $write_log       = 'append'
-
-  $curses_group    = 'no'
-  $curses_nzb_name = 'yes'
-  $curses_time     = 'no'
-  $output_mode     = 'curses'
-  $update_interval = 200
-
-  $tasks = []
-
-  $health_check      = 'delete'
-  $par_buffer        = 100
-  $par_check         = 'auto'
-  $par_cleanup_queue = 'yes'
-  $par_ignore_ect    = ['.sfv', '.nzb', '.nfo']
-  $par_pause_queue   = 'no'
-  $par_quick         = 'yes'
-  $par_rename        = 'yes'
-  $par_repair        = 'yes'
-  $par_scan          = 'auto'
-  $par_threads       = 0
-  $par_time_limit    = 0
-
-  $ext_cleanup_disk    = ['.par2', '.sfv', '_brokenlog.txt']
-  $seven_zip_cmd       = '${AppDir}/7za'
-  $unpack              = 'yes'
-  $unpack_cleanup_disk = 'yes'
-  $unpack_pass_file    = ''
-  $unpack_pause_queue  = 'no'
-  $unrar_cmd           = '${AppDir}/unrar'
-
-  $event_interval     = 0
-  $post_script        = ''
-  $queue_script       = ''
-  $scan_script        = ''
-  $script_order       = ''
-  $script_pause_queue = 'no'
-
-  # Service params
-  $service_enable = true
-  $service_ensure = true
-
-  case $::osfamily {
-    'Debian': {
+  if ($::nzbget::intermediate_dir) {
+    if (!is_absolute_path($::nzbget::intermediate_dir)) {
+      $intermediate_dir = "${::nzbget::service_dir}/${::nzbget::intermediate_dir}"
+    } else {
+      $intermediate_dir = $::nzbget::intermediate_dir
     }
-    'RedHat', 'Amazon': {
+  } else {
+    $intermediate_dir = undef
+  }
+
+  if (!is_absolute_path($::nzbget::nzb_dir)) {
+    $nzb_dir = "${::nzbget::service_dir}/${::nzbget::nzb_dir}"
+  } else {
+    $nzb_dir = $::nzbget::nzb_dir
+  }
+
+  if (!is_absolute_path($::nzbget::queue_dir)) {
+    $queue_dir = "${::nzbget::service_dir}/${::nzbget::queue_dir}"
+  } else {
+    $queue_dir = $::nzbget::queue_dir
+  }
+
+  if (!is_absolute_path($::nzbget::temp_dir)) {
+    $temp_dir = "${::nzbget::service_dir}/${::nzbget::temp_dir}"
+  } else {
+    $temp_dir = $::nzbget::temp_dir
+  }
+
+  if ($::nzbget::web_dir) {
+    if (!is_absolute_path($::nzbget::web_dir)) {
+      $web_dir = "${::nzbget::service_dir}/${::nzbget::web_dir}"
+    } else {
+      $web_dir = $::nzbget::web_dir
     }
-    default: {
-      fail("${::operatingsystem} not supported")
+  } else {
+    $web_dir = undef
+  }
+
+  $script_dir = $::nzbget::script_dir.map |$dir| {
+    if (!is_absolute_path($dir)) {
+      $required_abs_path = "${::nzbget::service_dir}/${dir}"
+    } else {
+      $required_abs_path = $dir
     }
+  }
+
+  if ($::nzbget::lock_file) {
+    if (!is_absolute_path($::nzbget::lock_file)) {
+      $lock_file = "${::nzbget::service_dir}/${::nzbget::lock_file}"
+      $lock_dir = dirname($lock_file)
+    } else {
+      $lock_file = $::nzbget::lock_file
+      $lock_dir = dirname($lock_file)
+    }
+  } else {
+    $lock_file = undef
+    $lock_dir = undef
+  }
+
+  if (!is_absolute_path($::nzbget::log_file)) {
+    $log_file = "${::nzbget::service_dir}/${::nzbget::log_file}"
+    $log_dir = dirname($log_file)
+  } else {
+    $log_file = $::nzbget::log_file
+    $log_dir = dirname($log_file)
+  }
+
+  if (!is_absolute_path($::nzbget::config_template)) {
+    $config_template = "${::nzbget::service_dir}/${::nzbget::config_template}"
+  } else {
+    $config_template = $::nzbget::config_template
+  }
+
+  if ($::nzbget::required_dir) {
+    $required_dir = $::nzbget::required_dir.map |$dir| {
+      if (!is_absolute_path($dir)) {
+        $required_abs_path = "${::nzbget::service_dir}/${dir}"
+      } else {
+        $required_abs_path = $dir
+      }
+    }
+  } else {
+    $required_dir = undef
+  }
+
+  if ($::nzbget::cert_store) {
+    if (!is_absolute_path($::nzbget::cert_store)) {
+      $cert_store = "${::nzbget::service_dir}/${::nzbget::cert_store}"
+      $cert_dir = dirname($cert_store)
+    } else {
+      $cert_store = $::nzbget::cert_store
+      $cert_dir = dirname($cert_store)
+    }
+  } else {
+    $cert_store = undef
+    $cert_dir = undef
+  }
+
+  if ($::nzbget::secure_cert) {
+    if (!is_absolute_path($::nzbget::secure_cert)) {
+      fail "secure_cert must be an absolute path [${::nzbget::secure_cert}]"
+    } else {
+      $secure_cert_dir = dirname($::nzbget::secure_cert)
+      $secure_cert_file = basename($::nzbget::secure_cert)
+    }
+  } else {
+    $secure_cert_dir = undef
+    $secure_cert_file = undef
+  }
+
+  if ($::nzbget::secure_key) {
+    if (!is_absolute_path($::nzbget::secure_key)) {
+      fail "secure_key must be an absolute path [${::nzbget::secure_key}]"
+    } else {
+      $secure_key_dir = dirname($::nzbget::secure_key)
+      $secure_key_file = basename($::nzbget::secure_key)
+    }
+  } else {
+    $secure_key_dir = undef
+    $secure_key_file = undef
+  }
+
+  if ($::nzbget::unpack_pass_file) {
+    if (!is_absolute_path($::nzbget::unpack_pass_file)) {
+      $unpack_pass_file = "${::nzbget::service_dir}/${::nzbget::unpack_pass_file}"
+      $unpack_pass_dir = dirname($unpack_pass_file)
+      $unpack_pass_file_name = basename($unpack_pass_file)
+    } else {
+      $unpack_pass_file = $::nzbget::unpack_pass_file
+      $unpack_pass_dir = dirname($unpack_pass_file)
+      $unpack_pass_file_name = basename($unpack_pass_file)
+    }
+  } else {
+    $unpack_pass_file = undef
+    $unpack_pass_dir = undef
+    $unpack_pass_file_name = undef
+  }
+
+  $daemon_required_mounts = delete(unique([
+    "${::nzbget::service_dir}",
+    "${main_dir}",
+    "${config_file_dir}",
+    "${nzb_dir}",
+    "${queue_dir}",
+    "${temp_dir}",
+    "${cert_dir}",
+    "${secure_cert_dir}",
+    "${secure_key_dir}",
+    "${web_dir}"] +
+    $required_dir), '')
+
+  $required_dir_config_mounts = delete(unique([
+    "${::nzbget::service_dir}",
+    "${main_dir}",
+    "${intermediate_dir}",
+    "${destination_dir}",
+    "${nzb_dir}",
+    "${queue_dir}",
+    "${temp_dir}",
+    "${lock_dir}",
+    "${log_dir}",
+    "${cert_dir}",
+    "${secure_cert_dir}",
+    "${secure_key_dir}",
+    "${unpack_pass_dir}",
+    "${web_dir}"] +
+    $required_dir +
+    $script_dir), '')
+
+  $managed_service_dirs = nzb_dir_filter(
+    ["${::nzbget::service_dir}", "${main_dir}"] + $script_dir,
+    $masks)
+
+  $_managed_data_dirs = nzb_dir_filter(
+    ["${intermediate_dir}",
+     "${destination_dir}",
+     "${nzb_dir}",
+     "${queue_dir}",
+     "${temp_dir}"],
+    $masks)
+
+  # If both are managed, remove any service dupes from data dirs.
+  if ($::nzbget::manage_service_dirs[0] and $::nzbget::manage_data_dirs[0]) {
+    $managed_data_dirs = delete($_managed_data_dirs, $managed_service_dirs)
+  } else {
+    $managed_data_dirs = $_managed_data_dirs
+  }
+
+  case $::nzbget::group {
+    $::nzbget::user: { $user_resource_group = undef }
+    default:         { $user_resource_group = $::nzbget::group }
   }
 }

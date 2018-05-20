@@ -1,202 +1,295 @@
 # Class: nzbget
 # ===========================
 #
-# Full description of class nzbget here.
+# For version 19.1 stable of NZBGet.
 #
-# Parameters
-# ----------
+# Does not use NZBGet-styled relative paths (${MainDir}). Relative paths may be
+#   used, and are relative to $service_dir. Absolute paths preferred.
 #
-# * `sample parameter`
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# Uses default nzbget configuration values for ubuntu. Parameters correspond to
+#   nzbget conf file settings:
+#   https://github.com/nzbget/nzbget/blob/c0eedc342b422ea2797bc85a3fb19c0a2c60e716/nzbget.conf
 #
+
 class nzbget (
-  # Install params
-  $destination_file = $::nzbget::params::destination_file,
-  $install_dir      = $::nzbget::params::install_dir,
-  $manage_user      = $::nzbget::params::manage_user,
-  $source_url       = $::nzbget::params::source_url,
-  $user             = $::nzbget::params::user,
+  # Puppet settings
+  Boolean                   $manage_ppa           = true,
+  Boolean                   $manage_user          = true,
+  Tuple[Boolean, String]    $manage_service_dirs  = [true, '/home'],
+  Tuple[Boolean, String]    $manage_data_dirs     = [true, '/home/nzbget'],
+  Boolean                   $manage_certs         = true,
+  Boolean                   $manage_pass_file     = true,
+  String                    $user                 = 'nzbget',
+  String                    $group                = 'nzbget',
+  String                    $service_dir          = '/home/nzbget',
+  String                    $config_file          = '/etc/nzbget.conf',
+  Boolean                   $service_enable       = true,
+  Boolean                   $service_ensure       = true,
 
-  # Config params
-  $config_file = $::nzbget::params::config_file,
+  # Paths Section
+  String                    $main_dir             = 'downloads',
+  String                    $destination_dir      = 'dst',
+  Optional[String]          $intermediate_dir     = 'inter',
+  String                    $nzb_dir              = 'nzb',
+  String                    $queue_dir            = 'queue',
+  String                    $temp_dir             = 'tmp',
+  Optional[String]          $web_dir              = '/usr/share/nzbget/webui',
+  Array                     $script_dir           = ['scripts'],
+  Optional[String]          $lock_file            = 'nzbget.lock',
+  String                    $log_file             = 'dst/nzbget.log',
+  String                    $config_template      = '/usr/share/nzbget/nzbget.conf',
+  Optional[Array[String]]   $required_dir         = undef,
+  Optional[String]          $cert_store           = undef,
 
-  $config_template = $::nzbget::params::config_template,
-  $dest_dir        = $::nzbget::params::dest_dir,
-  $inter_dir       = $::nzbget::params::inter_dir,
-  $lock_file       = $::nzbget::params::lock_file,
-  $log_file        = $::nzbget::params::log_file,
-  $main_dir        = $::nzbget::params::main_dir,
-  $nzb_dir         = $::nzbget::params::nzb_dir,
-  $queue_dir       = $::nzbget::params::queue_dir,
-  $script_dir      = $::nzbget::params::script_dir,
-  $temp_dir        = $::nzbget::params::temp_dir,
-  $web_dir         = $::nzbget::params::web_dir,
+  # Servers Section
+  Optional[Array[Struct[{
+    active                  => Boolean,
+    Optional[name]          => String,
+    level                   => Integer[0, 99],
+    optional                => Boolean,
+    group                   => Integer[0, 99],
+    host                    => String,
+    port                    => Integer[1, 65535],
+    username                => String,
+    password                => String,
+    join_group              => Boolean,
+    encryption              => Boolean,
+    Optional[cipher]        => Array[String],
+    connections             => Integer[0, 999],
+    retention               => Integer,
+    ip_version              => Enum['auto', 'ipv4', 'ipv6'],
+    Optional[notes]         => String
+  }]]]                      $servers              = [{
+    active                  => true,
+    name                    => 'my.newsserver.com',
+    level                   => 0,
+    optional                => false,
+    group                   => 0,
+    host                    => 'my.newsserver.com',
+    port                    => 119,
+    username                => 'user',
+    password                => 'pass',
+    join_group              => false,
+    encryption              => false,
+    connections             => 4,
+    retention               => 0,
+    ip_version              => 'auto',
+  }],
 
-  $servers = $::nzbget::params::servers,
+  # Security Section
+  String                    $control_ip           = '0.0.0.0',
+  Integer[1, 65535]         $control_port         = 6789,
+  Optional[String]          $control_username     = 'nzbget',
+  Optional[String]          $control_password     = 'tegbzn6789',
+  Optional[String]          $restricted_username  = undef,
+  Optional[String]          $restricted_password  = undef,
+  Optional[String]          $add_username         = undef,
+  Optional[String]          $add_password         = undef,
+  Boolean                   $form_auth            = false,
+  Boolean                   $secure_control       = false,
+  Integer[1, 65535]         $secure_port          = 6791,
+  Optional[String]          $secure_cert          = undef,
+  Optional[String]          $secure_key           = undef,
+  Optional[Array[String]]   $authorized_ips       = undef,
+  Boolean                   $cert_check           = false,
+  String                    $daemon_username      = 'root',
+  String                    $umask                = '1000',
 
-  $add_password        = $::nzbget::params::add_password,
-  $add_username        = $::nzbget::params::add_username,
-  $authorized_ip       = $::nzbget::params::authorized_ip,
-  $control_ip          = $::nzbget::params::control_ip,
-  $control_password    = $::nzbget::params::control_password,
-  $control_port        = $::nzbget::params::control_port,
-  $control_username    = $::nzbget::params::control_username,
-  $daemon_username     = $::nzbget::params::daemon_username,
-  $restricted_password = $::nzbget::params::restricted_password,
-  $restricted_username = $::nzbget::params::restricted_username,
-  $secure_cert         = $::nzbget::params::secure_cert,
-  $secure_control      = $::nzbget::params::secure_control,
-  $secure_key          = $::nzbget::params::secure_key,
-  $secure_port         = $::nzbget::params::secure_port,
-  $umask               = $::nzbget::params::umask,
+  # Categories Section
+  Optional[Array[Struct[{
+    name                    => String,
+    Optional[dest_dir]      => String,
+    unpack                  => Boolean,
+    Optional[extensions]    => Array[String],
+    Optional[aliases]       => Array[String]
+  }]]]                      $categories              = [{
+    name                    => 'Movies',
+    unpack                  => true
+  }, {
+    name                    => 'Series',
+    unpack                  => true
+  }, {
+    name                    => 'Music',
+    unpack                  => true
+  }, {
+    name                    => 'Software',
+    unpack                  => true
+  }],
 
-  $categories = $::nzbget::params::categories,
+  # RSS Feeds Section
+  Optional[Array[Struct[{
+    name                    => String,
+    Optional[url]           => String,
+    Optional[filter]        => Array[String],
+    interval                => Integer,
+    backlog                 => Boolean,
+    pause_nzb               => Boolean,
+    Optional[category]      => String,
+    priority                => Integer,
+    Optional[extensions]    => Array[String]
+ }]]]                       $feeds                 = [{
+    name                    => 'my feed',
+    interval                => 15,
+    backlog                 => true,
+    pause_nzb               => false,
+    priority                => 0
+  }],
 
-  $rss_feeds = $::nzbget::params::rss_feeds,
+  # Incoming NZBs Section
+  Boolean                   $append_category_dir  = true,
+  Integer                   $nzb_dir_interval     = 5,
+  Integer                   $nzb_dir_file_age     = 60,
+  Boolean                   $dupe_check           = true,
 
-  $append_category_dir = $::nzbget::params::append_category_dir,
-  $dupe_check          = $::nzbget::params::dupe_check,
-  $nzb_dir_file_age    = $::nzbget::params::nzb_dir_file_age,
-  $nzb_dir_interval    = $::nzbget::params::nzb_dir_interval,
+  # Download Queue Section
+  Boolean                   $save_queue           = true,
+  Boolean                   $flush_queue          = true,
+  Boolean                   $reload_queue         = true,
+  Boolean                   $continue_partial     = true,
+  Integer                   $propagation_delay    = 0,
+  Boolean                   $decode               = true,
+  Integer                   $article_cache        = 0,
+  Boolean                   $direct_write         = true,
+  Integer                   $write_buffer         = 0,
+  Boolean                   $crc_check            = true,
+  Enum['auto',
+      'nzb',
+      'article']            $file_naming          = 'auto',
+  Boolean                   $reorder_files        = true,
+  Enum['sequential',
+      'balanced',
+      'aggressive',
+      'rocket']             $post_strategy        = 'balanced',
+  Integer                   $disk_space           = 250,
+  Boolean                   $nzb_cleanup_disk     = true,
+  Integer                   $keep_history         = 30,
+  Integer                   $feed_history         = 7,
 
-  $accurate_rate       = $::nzbget::params::accurate_rate,
-  $article_cache       = $::nzbget::params::article_cache,
-  $article_timeout     = $::nzbget::params::article_timeout,
-  $continue_partial    = $::nzbget::params::continue_partial,
-  $crc_check           = $::nzbget::params::crc_check,
-  $decode              = $::nzbget::params::decode,
-  $delete_cleanup_disk = $::nzbget::params::delete_cleanup_disk,
-  $direct_write        = $::nzbget::params::direct_write,
-  $disk_space          = $::nzbget::params::disk_space,
-  $download_rate       = $::nzbget::params::download_rate,
-  $feed_history        = $::nzbget::params::feed_history,
-  $keep_history        = $::nzbget::params::keep_history,
-  $nzb_cleanup_disk    = $::nzbget::params::nzb_cleanup_disk,
-  $propagation_delay   = $::nzbget::params::propagation_delay,
-  $reload_queue        = $::nzbget::params::reload_queue,
-  $retries             = $::nzbget::params::retries,
-  $retry_interval      = $::nzbget::params::retry_interval,
-  $save_queue          = $::nzbget::params::save_queue,
-  $terminate_timeout   = $::nzbget::params::terminate_timeout,
-  $url_connections     = $::nzbget::params::url_connections,
-  $url_force           = $::nzbget::params::url_force,
-  $url_timeout         = $::nzbget::params::url_timeout,
-  $write_buffer        = $::nzbget::params::write_buffer,
+  # Connection Section
+  Integer[0, 99]            $article_retries      = 3,
+  Integer                   $article_interval     = 10,
+  Integer                   $article_timeout      = 60,
+  Integer[0, 99]            $url_retries          = 3,
+  Integer                   $url_interval         = 10,
+  Integer                   $url_timeout          = 60,
+  Integer                   $terminate_timeout    = 600,
+  Integer                   $download_rate        = 0,
+  Boolean                   $accurate_rate        = false,
+  Integer[0, 999]           $url_connections      = 4,
+  Boolean                   $url_force            = true,
+  Integer                   $monthly_quota        = 0,
+  Integer[1, 31]            $quota_start_day      = 1,
+  Integer                   $daily_quota          = 0,
 
-  $broken_log      = $::nzbget::params::broken_log,
-  $debug_target    = $::nzbget::params::debug_target,
-  $detail_target   = $::nzbget::params::detail_target,
-  $dump_core       = $::nzbget::params::dump_core,
-  $error_target    = $::nzbget::params::error_target,
-  $info_target     = $::nzbget::params::info_target,
-  $log_buffer_size = $::nzbget::params::log_buffer_size,
-  $nzb_log         = $::nzbget::params::nzb_log,
-  $rotate_log      = $::nzbget::params::rotate_log,
-  $time_correction = $::nzbget::params::time_correction,
-  $warning_target  = $::nzbget::params::warning_target,
-  $write_log       = $::nzbget::params::write_log,
+  # Logging Section
+  Enum['none',
+      'append',
+      'reset',
+      'rotate']             $write_log            = 'append',
+  Integer                   $rotate_log           = 3,
+  Enum['screen',
+      'log',
+      'both',
+      'none']               $error_target         = 'both',
+  Enum['screen',
+      'log',
+      'both',
+      'none']               $warning_target       = 'both',
+  Enum['screen',
+      'log',
+      'both',
+      'none']               $info_target          = 'both',
+  Enum['screen',
+      'log',
+      'both',
+      'none']               $detail_target        = 'log',
+  Enum['screen',
+      'log',
+      'both',
+      'none']               $debug_target         = 'log',
+  Integer                   $log_buffer_size      = 1000,
+  Boolean                   $nzb_log              = true,
+  Boolean                   $broken_log           = true,
+  Boolean                   $crash_trace          = true,
+  Boolean                   $crash_dump           = false,
+  Integer                   $time_correction      = 0,
 
-  $curses_group    = $::nzbget::params::curses_group,
-  $curses_nzb_name = $::nzbget::params::curses_nzb_name,
-  $curses_time     = $::nzbget::params::curses_time,
-  $output_mode     = $::nzbget::params::output_mode,
-  $update_interval = $::nzbget::params::update_interval,
+  # Display Section
+  Enum['loggable',
+      'colored',
+      'curses']             $output_mode          = 'curses',
+  Boolean                   $curses_nzb_name      = true,
+  Boolean                   $curses_group         = false,
+  Boolean                   $curses_time          = false,
+  Integer[25]               $update_interval      = 200,
 
-  $tasks = $::nzbget::params::tasks,
+  # Scheduler Section
+  Optional[Array[Struct[{
+    Optional[time]          => Array[String],
+    Optional[week_days]     => Array[String],
+    command                 => Enum['PauseDownload',
+                                  'UnpauseDownload',
+                                  'PausePostProcess',
+                                  'UnpausePostProcess',
+                                  'PauseScan',
+                                  'UnpauseScan',
+                                  'DownloadRate',
+                                  'Script',
+                                  'Process',
+                                  'ActivateServer',
+                                  'DeactivateServer',
+                                  'FetchFeed'],
+    Optional[param]         => String
+  }]]]                      $tasks                = undef,
 
-  $health_check      = $::nzbget::params::health_check,
-  $par_buffer        = $::nzbget::params::par_buffer,
-  $par_check         = $::nzbget::params::par_check,
-  $par_cleanup_queue = $::nzbget::params::par_cleanup_queue,
-  $par_ignore_ect    = $::nzbget::params::par_ignore_ect,
-  $par_pause_queue   = $::nzbget::params::par_pause_queue,
-  $par_quick         = $::nzbget::params::par_quick,
-  $par_rename        = $::nzbget::params::par_rename,
-  $par_repair        = $::nzbget::params::par_repair,
-  $par_scan          = $::nzbget::params::par_scan,
-  $par_threads       = $::nzbget::params::par_threads,
-  $par_time_limit    = $::nzbget::params::par_time_limit,
+  # Check and Repair Section
+  Enum['auto',
+      'always',
+      'force',
+      'manual']             $par_check            = 'auto',
+  Boolean                   $par_repair           = true,
+  Enum['limited',
+      'extended',
+      'full',
+      'dupe']               $par_scan             = 'extended',
+  Boolean                   $par_quick            = true,
+  Integer                   $par_buffer           = 16,
+  Integer[0, 99]            $par_threads          = 0,
+  Optional[Array[String]]   $par_ignore_ext       = ['.sfv', '.nzb', '.nfo'],
+  Boolean                   $par_rename           = true,
+  Boolean                   $rar_rename           = true,
+  Boolean                   $direct_rename        = false,
+  Enum['delete',
+      'park',
+      'pause',
+      'none']               $health_check         = 'park',
+  Integer                   $par_time_limit       = 0,
+  Boolean                   $par_pause_queue      = false,
 
-  $ext_cleanup_disk    = $::nzbget::params::ext_cleanup_disk,
-  $seven_zip_cmd       = $::nzbget::params::seven_zip_cmd,
-  $unpack              = $::nzbget::params::unpack,
-  $unpack_cleanup_disk = $::nzbget::params::unpack_cleanup_disk,
-  $unpack_pass_file    = $::nzbget::params::unpack_pass_file,
-  $unpack_pause_queue  = $::nzbget::params::unpack_pause_queue,
-  $unrar_cmd           = $::nzbget::params::unrar_cmd,
+  # Unpack Section
+  Boolean                   $unpack               = true,
+  Boolean                   $direct_unpack        = false,
+  Boolean                   $unpack_pause_queue   = false,
+  Boolean                   $unpack_cleanup_disk  = true,
+  String                    $unrar_cmd            = 'unrar',
+  String                    $seven_zip_cmd        = '7z',
+  Optional[Array[String]]   $ext_cleanup_disk     = ['.par2', '.sfv', '_brokenlog.txt'],
+  Optional[Array[String]]   $unpack_ignore_ext    = ['.cbr'],
+  Optional[String]          $unpack_pass_file     = undef,
 
-  $event_interval     = $::nzbget::params::event_interval,
-  $post_script        = $::nzbget::params::post_script,
-  $queue_script       = $::nzbget::params::queue_script,
-  $scan_script        = $::nzbget::params::scan_script,
-  $script_order       = $::nzbget::params::script_order,
-  $script_pause_queue = $::nzbget::params::script_pause_queue,
+  # Extension Scripts
+  Optional[Array[String]]   $extensions           = undef,
+  Optional[Array[String]]   $script_order         = undef,
+  Boolean                   $script_pause_queue   = false,
+  Optional[Array[String]]   $shell_override       = undef,
+  Integer[-1]               $event_interval       = 0,
+) {
+  if ($facts['os']['family'] != 'Debian') {
+    fail "Your osfamily (${facts[os][family]}) is not supported by this module"
+  }
 
-  $custom_config = [],
-
-  # Service params
-  $service_ensure = $::nzbget::params::service_ensure,
-  $service_enable = $::nzbget::params::service_enable,
-  ) inherits ::nzbget::params {
-
-  # Install params
-  validate_absolute_path($destination_file, $install_dir)
-  validate_bool($manage_user)
-  validate_string($source_url, $user)
-
-  # Config params
-  validate_absolute_path($config_file)
-  validate_array($servers, $categories, $rss_feeds, $tasks,
-  $par_ignore_ect, $ext_cleanup_disk, $custom_config)
-  validate_integer($control_port)
-  validate_integer($secure_port)
-  validate_integer($nzb_dir_file_age)
-  validate_integer($nzb_dir_interval)
-  validate_integer($article_cache)
-  validate_integer($article_timeout)
-  validate_integer($disk_space)
-  validate_integer($download_rate)
-  validate_integer($feed_history)
-  validate_integer($keep_history)
-  validate_integer($propagation_delay)
-  validate_integer($retries)
-  validate_integer($retry_interval)
-  validate_integer($terminate_timeout)
-  validate_integer($url_connections)
-  validate_integer($url_timeout)
-  validate_integer($write_buffer)
-  validate_integer($log_buffer_size)
-  validate_integer($rotate_log)
-  validate_integer($time_correction)
-  validate_integer($update_interval)
-  validate_integer($par_buffer)
-  validate_integer($par_threads)
-  validate_integer($par_time_limit)
-  validate_integer($event_interval)
-  validate_string($config_template, $dest_dir, $inter_dir, $lock_file,
-  $log_file, $main_dir, $nzb_dir, $queue_dir, $script_dir, $temp_dir,
-  $web_dir, $add_password, $add_username, $authorized_ip, $control_ip,
-  $control_password, $control_username, $daemon_username,
-  $restricted_password, $restricted_username, $secure_cert,
-  $secure_control, $secure_key, $append_category_dir, $dupe_check,
-  $accurate_rate, $continue_partial, $crc_check, $decode,
-  $delete_cleanup_disk, $direct_write, $nzb_cleanup_disk,
-  $reload_queue, $save_queue, $url_force, $broken_log, $debug_target,
-  $detail_target, $dump_core, $error_target, $info_target, $nzb_log,
-  $warning_target, $write_log, $curses_group, $curses_nzb_name,
-  $curses_time, $output_mode, $health_check, $par_check,
-  $par_cleanup_queue, $par_pause_queue, $par_quick, $par_rename,
-  $par_repair, $par_scan, $seven_zip_cmd, $unpack,
-  $unpack_cleanup_disk, $unpack_pass_file, $unpack_pause_queue,
-  $unrar_cmd, $post_script, $queue_script, $scan_script,
-  $script_order, $script_pause_queue, $umask)
-
-  # Service params
-  validate_bool($service_enable, $service_ensure)
-
-  class { '::nzbget::install': } ->
-  class { '::nzbget::config': } ~>
-  class { '::nzbget::service': } ->
-  Class['::nzbget']
+  include ::nzbget::params
+  include ::nzbget::install
+  include ::nzbget::config
+  include ::nzbget::service
 }

@@ -1,28 +1,16 @@
 ##############################################################################
 ### CATEGORIES                                                             ###
-
-<%- if !@categories.nil? and @categories.length > 0 -%>
-    <%- @categories.each_with_index do |category, i| -%>
+<%- if !scope['::nzbget::categories'].nil? and scope['::nzbget::categories'].length > 0 -%>
+    <%- scope['::nzbget::categories'].each_with_index do |category, i| -%>
         <%- category_num = i + 1 -%>
-# Category name.
+
+# <%= category['name'].to_s %>
 Category<%= category_num %>.Name=<%= category['name'].to_s %>
-
-# Destination directory for this category.
 Category<%= category_num %>.DestDir=<%= category['dest_dir'].to_s %>
-
-        <%- unless category['unpack'].nil? -%>
-# Unpack downloaded nzb-files (yes, no).
-Category<%= category_num %>.Unpack=<%= category['unpack'].to_s %>
-        <%- end -%>
-
-        <%- unless category['post_script'].nil? -%>
-# Default list of post-processing scripts.
-Category<%= category_num %>.PostScript=<%= category['post_script'].join(',') %>
-        <%- end -%>
-
-        <%- unless category['aliases'].nil? -%>
-# List of aliases.
-Category<%= category_num %>.Aliases=<%= category['aliases'].join(',') %>
-        <%- end -%>
-    <%- end -%>
+Category<%= category_num %>.Unpack=<%= category['unpack'] ? 'yes' : 'no' %>
+Category<%= category_num %>.Extensions=<%= category['extensions'].join(',') if category['extensions'] %>
+Category<%= category_num %>.Aliases=<%= category['aliases'].join(',') if category['aliases'] %>
+   <%- end -%>
 <%- end -%>
+
+

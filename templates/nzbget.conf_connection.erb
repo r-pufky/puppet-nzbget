@@ -1,0 +1,19 @@
+##############################################################################
+### CONNECTION                                                             ###
+
+ArticleRetries=<%= scope['::nzbget::article_retries'] %>
+ArticleInterval=<%= scope['::nzbget::article_interval'] %>
+ArticleTimeout=<%= scope['::nzbget::article_timeout'] %>
+UrlRetries=<%= scope['::nzbget::url_retries'] %>
+UrlInterval=<%= scope['::nzbget::url_interval'] %>
+UrlTimeout=<%= scope['::nzbget::url_timeout'] %>
+TerminateTimeout=<%= scope['::nzbget::terminate_timeout'] %>
+DownloadRate=<%= scope['::nzbget::download_rate'] %>
+AccurateRate=<%= scope['::nzbget::accurate_rate'] ? 'yes' : 'no' %>
+UrlConnections=<%= scope['::nzbget::url_connections'] %>
+UrlForce=<%= scope['::nzbget::url_force'] ? 'yes' : 'no' %>
+MonthlyQuota=<%= scope['::nzbget::monthly_quota'] %>
+QuotaStartDay=<%= scope['::nzbget::quota_start_day'] %>
+DailyQuota=<%= scope['::nzbget::daily_quota'] %>
+
+

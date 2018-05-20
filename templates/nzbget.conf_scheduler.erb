@@ -1,21 +1,15 @@
 ##############################################################################
 ### SCHEDULER                                                              ###
-
-<%- if !@tasks.nil? and @tasks.length > 0 -%>
-    <%- @tasks.each_with_index do |task, i| -%>
+<%- if !scope['::nzbget::tasks'].nil? and scope['::nzbget::tasks'].length > 0 -%>
+    <%- scope['::nzbget::tasks'].each_with_index do |task, i| -%>
         <%- task_num = i + 1 -%>
-# Time to execute the command (HH:MM).
-Task<%= task_num %>.Time=<%= task['time'].to_s %>
 
-# Week days to execute the command (1-7).
-Task<%= task_num %>.WeekDays=<%= task['week_days'].to_s %>
-
-# Command to be executed (PauseDownload, UnpauseDownload, PausePostProcess,
-# UnpausePostProcess, PauseScan, UnpauseScan, DownloadRate, Script, Process,
-# ActivateServer, DeactivateServer, FetchFeed).
+# Task: <%= task_num %>
+Task<%= task_num %>.Time=<%= task['time'].join(',') if task['time'] %>
+Task<%= task_num %>.WeekDays=<%= task['week_days'].join(',') if task['week_days'] %>
 Task<%= task_num %>.Command=<%= task['command'].to_s %>
-
-# Parameters for the command if needed.
 Task<%= task_num %>.Param=<%= task['param'].to_s %>
-    <%- end -%>
+  <%- end -%>
 <%- end -%>
+
+

@@ -1,23 +1,14 @@
 ##############################################################################
 ### UNPACK                                                                 ###
 
-# Unpack downloaded nzb-files (yes, no).
-Unpack=<%= @unpack %>
+Unpack=<%= scope['::nzbget::unpack'] ? 'yes' : 'no' %>
+DirectUnpack=<%= scope['::nzbget::direct_unpack'] ? 'yes' : 'no' %>
+UnpackPauseQueue=<%= scope['::nzbget::unpack_pause_queue'] ? 'yes' : 'no' %>
+UnpackCleanupDisk=<%= scope['::nzbget::unpack_cleanup_disk'] ? 'yes' : 'no' %>
+UnrarCmd=<%= scope['::nzbget::unrar_cmd'] %>
+SevenZipCmd=<%= scope['::nzbget::seven_zip_cmd'] %>
+ExtCleanupDisk=<%= scope['::nzbget::ext_cleanup_disk'].join(',') if scope['::nzbget::ext_cleanup_disk'] %>
+UnpackIgnoreExt=<%= scope['::nzbget::unpack_ignore_ext'].join(',') if scope['::nzbget::unpack_ignore_ext'] %>
+UnpackPassFile=<%= scope['::nzbget::params::unpack_pass_file'] %>
 
-# Pause download queue during unpack (yes, no).
-UnpackPauseQueue=<%= @unpack_pause_queue %>
 
-# Delete archive files after successful unpacking (yes, no).
-UnpackCleanupDisk=<%= @unpack_cleanup_disk %>
-
-# Full path to unrar executable.
-UnrarCmd=<%= @unrar_cmd %>
-
-# Full path to 7-Zip executable.
-SevenZipCmd=<%= @seven_zip_cmd %>
-
-# Files to delete after successful download.
-ExtCleanupDisk=<%= @ext_cleanup_disk %>
-
-# Path to file containing unpack passwords.
-UnpackPassFile=<%= @unpack_pass_file %>
