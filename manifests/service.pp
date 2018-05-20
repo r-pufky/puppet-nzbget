@@ -6,7 +6,7 @@
 
 class nzbget::service {
   if ($::nzbget::params::use_systemd == true) {
-   file { '/etc/systemd/system/nzbget.service':
+    file { '/etc/systemd/system/nzbget.service':
       ensure  => file,
       owner   => 'root',
       group   => 'root',

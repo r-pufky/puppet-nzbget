@@ -127,7 +127,7 @@ class nzbget (
     Optional[category]      => String,
     priority                => Integer,
     Optional[extensions]    => Array[String]
- }]]]                       $feeds                 = [{
+  }]]]                      $feeds                 = [{
     name                    => 'my feed',
     interval                => 15,
     backlog                 => true,

@@ -7,32 +7,32 @@
   "source": "",
   "project_page": "",
   "issues_url": "",
-  "tags": ["nzbget", "ubuntu"]
   "dependencies": [
     {
       "name": "puppetlabs-concat",
-      "version_requirement": ">= 1.2.4"
+      "version_requirement": "= 4.2.1"
     },
     {
       "name": "pltraining-dirtree",
-      "version_requirement": ">= 0.3.0"
+      "version_requirement": "= 0.3.0"
     },
     {
       "name": "puppetlabs-stdlib",
-      "version_requirement": ">= 1.0.0"
-    }
+      "version_requirement": "= 4.25.1"
+    },
     {
       "name": "puppetlabs-apt",
-      "version_requirement": ">= 4.5.1"
+      "version_requirement": "= 4.5.1"
     }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.04", "16.04"
+        "14.04",
+        "16.04"
       ]
-  }
+    }
   ],
   "requirements": [
     {
@@ -40,5 +40,12 @@
       "version_requirement": ">= 5.0.0"
     }
   ],
-  "description": "Manages deployment of NZBGet on Ubuntu"
+  "tags": [
+    "nzbget",
+    "ubuntu"
+  ],
+  "description": "Manages deployment of NZBGet on Ubuntu",
+  "pdk-version": "1.5.0",
+  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git",
+  "template-ref": "1.5.0-0-gd1b3eca"
 }

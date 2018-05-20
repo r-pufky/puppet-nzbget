@@ -1,9 +1,3 @@
-# == Class nzbget::params
-#
-# This class is meant to be called from nzbget.
-# It sets service params according to user preferences.
-#
-
 # This function will apply all filters and return a unique, filtered array.
 function nzb_dir_filter(Array $dirs, Array $filters) >> Array {
   $result = $filters.map |$filter| {
@@ -16,6 +10,11 @@ function nzb_dir_filter(Array $dirs, Array $filters) >> Array {
   delete(unique(flatten($result)), '')
 }
 
+# == Class nzbget::params
+#
+# This class is meant to be called from nzbget.
+# It sets service params according to user preferences.
+#
 class nzbget::params {
   $packages = [
     'unrar',
@@ -195,46 +194,46 @@ class nzbget::params {
   }
 
   $daemon_required_mounts = delete(unique([
-    "${::nzbget::service_dir}",
-    "${main_dir}",
-    "${config_file_dir}",
-    "${nzb_dir}",
-    "${queue_dir}",
-    "${temp_dir}",
-    "${cert_dir}",
-    "${secure_cert_dir}",
-    "${secure_key_dir}",
-    "${web_dir}"] +
+    $::nzbget::service_dir,
+    $main_dir,
+    $config_file_dir,
+    $nzb_dir,
+    $queue_dir,
+    $temp_dir,
+    $cert_dir,
+    $secure_cert_dir,
+    $secure_key_dir,
+    $web_dir] +
     $required_dir), '')
 
   $required_dir_config_mounts = delete(unique([
-    "${::nzbget::service_dir}",
-    "${main_dir}",
-    "${intermediate_dir}",
-    "${destination_dir}",
-    "${nzb_dir}",
-    "${queue_dir}",
-    "${temp_dir}",
-    "${lock_dir}",
-    "${log_dir}",
-    "${cert_dir}",
-    "${secure_cert_dir}",
-    "${secure_key_dir}",
-    "${unpack_pass_dir}",
-    "${web_dir}"] +
+    $::nzbget::service_dir,
+    $main_dir,
+    $intermediate_dir,
+    $destination_dir,
+    $nzb_dir,
+    $queue_dir,
+    $temp_dir,
+    $lock_dir,
+    $log_dir,
+    $cert_dir,
+    $secure_cert_dir,
+    $secure_key_dir,
+    $unpack_pass_dir,
+    $web_dir] +
     $required_dir +
     $script_dir), '')
 
   $managed_service_dirs = nzb_dir_filter(
-    ["${::nzbget::service_dir}", "${main_dir}"] + $script_dir,
+    [$::nzbget::service_dir, $main_dir] + $script_dir,
     $masks)
 
   $_managed_data_dirs = nzb_dir_filter(
-    ["${intermediate_dir}",
-     "${destination_dir}",
-     "${nzb_dir}",
-     "${queue_dir}",
-     "${temp_dir}"],
+    [$intermediate_dir,
+      $destination_dir,
+      $nzb_dir,
+      $queue_dir,
+      $temp_dir],
     $masks)
 
   # If both are managed, remove any service dupes from data dirs.

@@ -7,18 +7,18 @@ class nzbget::config {
   if ($::nzbget::manage_service_dirs[0]) {
     file { $::nzbget::params::managed_service_dirs:
       ensure => directory,
-      owner => $::nzbget::user,
-      group => $::nzbget::group,
-      mode  => '0750',
+      owner  => $::nzbget::user,
+      group  => $::nzbget::group,
+      mode   => '0750',
     }
   }
 
   if ($::nzbget::manage_data_dirs[0]) {
     file { $::nzbget::params::managed_data_dirs:
       ensure => directory,
-      owner => $::nzbget::user,
-      group => $::nzbget::group,
-      mode  => '0750',
+      owner  => $::nzbget::user,
+      group  => $::nzbget::group,
+      mode   => '0750',
     }
   }
 
@@ -58,23 +58,23 @@ class nzbget::config {
 
   file { $::nzbget::params::log_file:
     ensure => present,
-    owner => $::nzbget::user,
-    group => $::nzbget::group,
-    mode  => '0700',
+    owner  => $::nzbget::user,
+    group  => $::nzbget::group,
+    mode   => '0700',
   }
 
   file { $::nzbget::params::lock_file:
     ensure => present,
-    owner => $::nzbget::user,
-    group => $::nzbget::group,
-    mode  => '0700',
+    owner  => $::nzbget::user,
+    group  => $::nzbget::group,
+    mode   => '0700',
   }
 
   concat { $::nzbget::params::config_file:
-    ensure  => 'present',
-    owner   => $::nzbget::user,
-    group   => $::nzbget::group,
-    mode    => '0640',
+    ensure => 'present',
+    owner  => $::nzbget::user,
+    group  => $::nzbget::group,
+    mode   => '0640',
   }
 
   concat::fragment { 'head':

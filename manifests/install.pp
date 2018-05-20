@@ -12,8 +12,8 @@ class nzbget::install {
     }
 
     package { 'nzbget':
-      ensure     => present,
-      require    => [
+      ensure  => present,
+      require => [
         Apt::Ppa['ppa:modriscoll/nzbget'],
         Apt::Key['ppa:modriscoll/nzbget'],
         Class['apt::update'],
@@ -22,14 +22,13 @@ class nzbget::install {
   }
 
   package { $::nzbget::params::packages:
-    ensure       => latest,
-    require      => Class['apt::update'],
+    ensure  => latest,
+    require => Class['apt::update'],
   }
 
   group { $::nzbget::group:
       ensure     => present,
-  } ->
-  if ($::nzbget::manage_user) {
+  } -> if ($::nzbget::manage_user) {
     user { $::nzbget::user:
       ensure     => present,
       comment    => 'NZBGet [Puppet Managed]',
