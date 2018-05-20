@@ -697,7 +697,7 @@ class { 'nzbget':
     password    => 'pass',
     join_group  => false,
     encryption  => true,
-    cipher      => ['+RSA', '+VERS-TLS-ALL', '+ARCFOUR-128']
+    cipher      => ['+RSA', '+VERS-TLS-ALL', '+ARCFOUR-128'],
     connections => 4,
     retention   => 0,
     ip_version  => 'auto',

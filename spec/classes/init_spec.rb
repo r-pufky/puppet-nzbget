@@ -22,27 +22,28 @@ describe 'nzbget' do
           it { is_expected.to contain_class('nzbget::service') \
             .that_subscribes_to('nzbget::config') }
 
-          it { is_expected.to contain_wget__fetch('nzbget download') \
-            .that_comes_before('Exec[nzbget install]') }
           it { is_expected.to contain_exec('nzbget install') }
           it { is_expected.to contain_user('nzbget') }
 
-          it { is_expected.to contain_file('/srv/nzbget') \
-            .that_comes_before('Concat[/srv/nzbget/nzbget.conf]') }
-          it { is_expected.to contain_concat('/srv/nzbget/nzbget.conf') }
-          it { is_expected.to contain_concat__fragment('categories') }
-          it { is_expected.to contain_concat__fragment('display') }
-          it { is_expected.to contain_concat__fragment('download') }
-          it { is_expected.to contain_concat__fragment('extension') }
-          it { is_expected.to contain_concat__fragment('incoming') }
-          it { is_expected.to contain_concat__fragment('logging') }
-          it { is_expected.to contain_concat__fragment('par') }
+          it { is_expected.to contain_file('/etc') \
+            .that_comes_before('Concat[/etc/nzbget.conf]') }
+          it { is_expected.to contain_concat('/etc/nzbget.conf') }
+          it { is_expected.to contain_concat__fragment('head') }
           it { is_expected.to contain_concat__fragment('paths') }
-          it { is_expected.to contain_concat__fragment('rss') }
-          it { is_expected.to contain_concat__fragment('scheduler') }
-          it { is_expected.to contain_concat__fragment('security') }
           it { is_expected.to contain_concat__fragment('servers') }
+          it { is_expected.to contain_concat__fragment('security') }
+          it { is_expected.to contain_concat__fragment('categories') }
+          it { is_expected.to contain_concat__fragment('rss_feeds') }
+          it { is_expected.to contain_concat__fragment('incoming') }
+          it { is_expected.to contain_concat__fragment('download') }
+          it { is_expected.to contain_concat__fragment('connection') }
+          it { is_expected.to contain_concat__fragment('logging') }
+          it { is_expected.to contain_concat__fragment('display') }
+          it { is_expected.to contain_concat__fragment('scheduler') }
+          it { is_expected.to contain_concat__fragment('check_and_repair') }
           it { is_expected.to contain_concat__fragment('unpack') }
+          it { is_expected.to contain_concat__fragment('extension') }
+
 
           it { is_expected.to contain_file('/etc/init/nzbget.conf') \
             .that_notifies('Service[nzbget]') }
